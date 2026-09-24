@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+# Minimal gradlew for CI - will download gradle if not present
+set -e
+DIR="$(cd "$(dirname "$0")" && pwd)"
+if [ ! -f "$DIR/gradle/wrapper/gradle-wrapper.jar" ]; then
+  echo "Downloading gradle-wrapper.jar"
+  mkdir -p "$DIR/gradle/wrapper"
+  curl -sL https://github.com/gradle/gradle/raw/master/gradle/wrapper/gradle-wrapper.jar -o "$DIR/gradle/wrapper/gradle-wrapper.jar" || wget -q https://github.com/gradle/gradle/raw/master/gradle/wrapper/gradle-wrapper.jar -O "$DIR/gradle/wrapper/gradle-wrapper.jar" || true
+fi
+# Fallback to system gradle if wrapper jar missing
+if [ -f "$DIR/gradle/wrapper/gradle-wrapper.jar" ]; then
+  exec java -jar "$DIR/gradle/wrapper/gradle-wrapper.jar" "$@"
+else
+  exec gradle "$@"
+fi
