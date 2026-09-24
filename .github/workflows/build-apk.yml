@@ -26,3 +26,4 @@ jobs:
         with:
           name: KBF-APK-4-Tracks-FINAL
           path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
